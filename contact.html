@@ -1,33 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" dir="ltr">
 <head>
     <meta charset="UTF-8">
+    <title>О нас | ЕГЭ по информатике</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Книжный магазин - Контакты</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Контакты</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="products.html">Наши продукты</a></li>
-                <li><a href="about.html">О нас</a></li>
-                <li><a href="contact.html">Контакты</a></li>
-            </ul>
-        </nav>
-    </header>
+  <nav>
+    <div class="navbar">
+      <div class="logo"><a href="#">ЕГЭ по информатике</a></div>
+      <ul class="nav-links">
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="contact.html">Обратная связь</a></li>
+        <li><a href="topics.html">Темы</a></li>
+        <li><a href="practice.html">Практика</a></li>
+        <li><a href="literature.html">Литература</a></li>
+      </ul>
+      <div class="user-info">
+        <span id="usernameDisplay"></span>
+        <div class="appearance">
+          <div class="light-dark">
+            <i class="btn fas fa-moon" data-color="#e4e6eb #e4e6eb #24292D #24292D #242526"></i>
+          </div>
+          <div class="color-icon">
+            <div class="icons">
+              <i class="fas fa-palette"></i>
+              <i class="fas fa-sort-down arrow"></i>
+            </div>
+            <div class="color-box">
+              <h3>Color Switcher</h3>
+              <div class="color-switchers">
+                <button class="btn blue active" data-color="#fff #24292d #4070f4 #0b3cc1 #F0F8FF"></button>
+                <button class="btn orange" data-color="#fff #242526 #F79F1F #DD8808 #fef5e6"></button>
+                <button class="btn purple" data-color="#fff #242526 #8e44ad #783993 #eadaf1"></button>
+                <button class="btn green" data-color="#fff #242526 #3A9943 #2A6F31 #DAF1DC"></button>
+                <button class="btn brown" data-color="#fff #242526 #99743a #6f522a #f1e5da"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-    <section id="contact-info">
-        <h2>Как нас найти</h2>
-        <p>Адрес: ул. Достоевского, д. 125, г. Санкт-Петербург</p>
-        <p>Телефон: +7 (977) 506-01-36</p>
-        <p>Email: maxim.superpin@yandex.ru</p>
-    </section>
+  <section class="about-content">
+    <h2 class="text">О нас</h2>
+    <div class="contact-info">
+      <p>Почта: <a href="mailto:maxim.superpin@yandex.ru">maxim.superpin@yandex.ru</a></p>
+      <p>Телеграм: <a href="https://t.me/phdexxx">@phdexxx</a></p>
+      <p>Телефон: <a href="tel:+79775060136">+7 (977) 506-01-36</a></p>
+    </div>
+    <pre class="ascii-art">
+                                 _....._                         
+                              .gSSSSSSSSSp.                      
+                            .d$$$SSSSSSSSOOb.                    
+                           d$$$$$SSSSSSSSOOOOb                   
+                          :$$$$$P'TSP'  \ `OOO;                  
+                          $$$P'/ .-Y.---.; ;TOO                  
+                         :$$P :.'        '/ |OO;                 
+                         $$$  |           `,:OOO                 
+                        :$$: :`_,_     _,_ | ;OO;                
+                        $$P| |"  `t   j'  "| |TOO                
+                        $$;| | `"'     `"' | |:OO                
+                        :^;| |            ,: |:^;                
+                        :".| :     d$b    :: |.";                
+                         \ ; :     ._.   ,:: ; /                 
+                          "; :    `._.'  ::: :"                  
+                           ; :\     -   ,::: ;                   
+                           | : :._.+++.,:;': ;                   
+                           | |  ;::::::::  : |                   
+                           | |  |  '"^:::  | :                   
+                           | | _;     :::_ | :                   
+                           ; |S$     ,:::;$| :                   
+                           ; :SSs.__,:::$$$; :                   
+                     __..ss; :SSSSS$$$$$$SS; :gg..__             
+               ..ssSSSSSSSSS :SS$$$$$$SSSSS; :$$$$S$$$Sg..       
+             .SSSSSSS$$$$$$$b TSSS$$$$$$$$P  ;$$SS$$$$$SSSS.     
+           .SSSSS$$$SSS$$$$$$$.:T$$^^^$$$$$g$$SSS$$$$SSSSSSSb    
+          :SS$$SSS$$$SSSS$$$$$$$$P ,--'`$SSSSSSS$$$SSSSSS$$SSb   
+          SS$$$$$SS$$$SSSSS$$$$$P :.--.  TSSS$$$$SSSSSS$$$$$SSb  
+         :SS$$$$$$$S$$$SSSSSS$$;  ,--.:   ;$$$SSSSSSSS$$$$$$$SS; 
+         SSSSS$$$$$$$$$$SSSSSSS; :.-.     :SSSSSSSSS$$$$$$$$$$SS 
+          T$SSSS$$$$$$$$SSSSSSS;   :S;    :SSSSSSS$$$$$$$$$$$$SS;
+          :$$SSS$$$$S$$$$SSSSSS;   :S;     SSSSSS$$$S$$$SSSS$$$S 
+          SSSS$SSS$$S$$$$SSSSSP    :S;     :SSSSS$$$S$SSS$$$$$$S 
+          :$$$$$$SSSS$$$$SSS^P    .SSS.    'SS$S$$$$SSS$$$SSSS$; 
+           $$$$SSS$$$S$$$SSS$$._.ySSSSSb    $SSSS$$$$SSSSSSS$SS  
+           $$$S$$$$$SS$$SSSSS$$$$;SSSSS$$gg$$SSSSS$$SSSSSS$$$$$  
+           $$$$$$SSSS$SSS$$SSS$$PSSSSSSSYSSSS$SS$SSSSSSSSSS$$$$  
+           $$SSSSS$$SSS$$$$$$$$P$$$$$$SSST$$$SS$$$$SSSS$$$SS$$$  
+           $S$$S$$SSS$$$$$$$$$P$$$$$$$$$$$TSSS$$$$$$$SSSSS$$$$;  
+           S$$S$$SS$$$$$$$$$$P$$$$$$$$$$$$$T$$$$$$$$$$SSSSSS$$   
+           :$$S$$S$$$$$$$$$$P$$$$$$$$$$$$$$$bT$$$$$$$$$SS$$S$$   
+            :$$$$S$$$$$$$$Pd$$$$$$$$$$$$$$$$$$bT$$$$$$$$S$$$$$   
+             T$$$$$$$$$$Pd$$$$$$$$$$$$$$$$$$$$$$bT$$$$$$S$$$$;   
+              `$$$$$$$^'$$$$$$$$$$$$$$$$$$$$$$$$$$$^$$$$$$$$P    
+                T$$$^   $$$$$$$$$$$$$$$$$$$$$$$$$$$   "^^^"      
+                        $$$$$$$$$$$$$$$$$$$$$$$$$$$              
+                   bug :$$$$$$$$$$$$$$$$$$$$$$$$$$$;             
+                       $$$$$$$$$$$$$$$$$$$$$$$$$$$$$             
+                      :$$BUG$$$$$$$$$$$$$$$$$$$$$$$$;            
+              $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$    
+    </pre>
+  </section>
 
-    <footer>
-        <p>&copy; 2024 Книжный магазин "Книжный уголок". Все права защищены.</p>
-    </footer>
+  <script src="user.js"></script>
+  <script src="script.js"></script>
+
 </body>
 </html>
