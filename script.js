@@ -1,97 +1,88 @@
-// Modal code
-document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("registerModal");
-  const btn = document.querySelector(".register-button");
-  const span = document.getElementsByClassName("close")[0];
-  const form = document.getElementById("registerForm");
+let participants = JSON.parse(localStorage.getItem('participants')) || [];
 
-  btn.onclick = function() {
-    modal.style.display = "block";
-  }
-
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+document.addEventListener('DOMContentLoaded', () => {
+    updateParticipantsList();
+    if (localStorage.getItem('santaResults')) {
+        showResults();
     }
-  }
-
-  form.onsubmit = function(event) {
-    event.preventDefault();
-    const username = document.getElementById("username").value;
-    localStorage.setItem("username", username);
-    const usernameDisplay = document.getElementById("usernameDisplay");
-    usernameDisplay.textContent = `Здравствуйте, ${username}`;
-    modal.style.display = "none";
-  }
 });
 
-// Existing color switcher code
-let colorIcons = document.querySelector(".color-icon"),
-icons = document.querySelector(".color-icon .icons");
+function addParticipant() {
+    const name = document.getElementById('name').value.trim();
+    const gift = document.getElementById('gift').value.trim();
 
-icons.addEventListener("click" , ()=>{
-  colorIcons.classList.toggle("open");
-})
-
-// getting all .btn elements
-let buttons = document.querySelectorAll(".btn");
-
-// Function to apply the selected color theme
-function applyTheme(theme) {
-  let root = document.querySelector(":root");
-  let color = theme.split(" ");
-  
-  root.style.setProperty("--white", color[0]);
-  root.style.setProperty("--black", color[1]);
-  root.style.setProperty("--nav-main", color[2]);
-  root.style.setProperty("--switchers-main", color[3]);
-  root.style.setProperty("--light-bg", color[4]);
-}
-
-// Check if a theme is already saved in localStorage
-let savedTheme = localStorage.getItem("themeColor");
-if (savedTheme) {
-  applyTheme(savedTheme);
-  document.querySelector(`[data-color="${savedTheme}"]`).classList.add("active");
-} else {
-  document.querySelector(".btn.blue").classList.add("active");
-}
-
-for (var button of buttons) {
-  button.addEventListener("click", (e) => { //adding click event to each button
-    let target = e.target;
-
-    let open = document.querySelector(".open");
-    if(open) open.classList.remove("open");
-
-    document.querySelector(".active").classList.remove("active");
-    target.classList.add("active");
-
-    // js code to switch colors (also day night mode)
-    let dataColor = target.getAttribute("data-color"); //getting data-color values of clicked button
-
-    // Save the selected theme in localStorage
-    localStorage.setItem("themeColor", dataColor);
-
-    applyTheme(dataColor);
-
-    let iconName = target.className.split(" ")[2]; //getting the class name of icon
-
-    let coloText = document.querySelector(".home-content span");
-
-    if(target.classList.contains("fa-moon")){ //if icon name is moon
-      target.classList.replace(iconName, "fa-sun") //replace it with the sun
-      colorIcons.style.display = "none";
-      coloText.classList.add("darkMode");
-    }else if (target.classList.contains("fa-sun")) { //if icon name is sun
-      target.classList.replace("fa-sun", "fa-moon"); //replace it with the sun
-      colorIcons.style.display = "block";
-      coloText.classList.remove("darkMode");
-      document.querySelector(".btn.blue").click();
+    if (name && gift) {
+        participants.push({ name, gift });
+        localStorage.setItem('participants', JSON.stringify(participants));  // Сохраняем в localStorage
+        updateParticipantsList();
+        document.getElementById('name').value = '';
+        document.getElementById('gift').value = '';
+    } else {
+        alert('Пожалуйста, заполните все поля!');
     }
-  });
+}
+
+function updateParticipantsList() {
+    const list = document.getElementById('participantsList');
+    list.innerHTML = '';
+    participants.forEach((participant) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = participant.name;  // Показываем только имена
+        list.appendChild(listItem);
+    });
+}
+
+function generateSecretSanta() {
+    if (participants.length < 2) {
+        alert('Для игры нужно хотя бы 2 участника!');
+        return;
+    }
+
+    const santaResults = assignSecretSantas(participants);
+    localStorage.setItem('santaResults', JSON.stringify(santaResults));  // Сохраняем результаты в localStorage
+    showResults();
+}
+
+function assignSecretSantas(participants) {
+    const santas = [...participants];
+    const results = [];
+
+    // Перемешиваем участников
+    for (let i = santas.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [santas[i], santas[j]] = [santas[j], santas[i]]; // Меняем местами
+    }
+
+    // Назначаем тайных санта
+    for (let i = 0; i < participants.length; i++) {
+        results.push({
+            giver: participants[i].name,
+            receiver: santas[i === participants.length - 1 ? 0 : i + 1].name,
+            gift: santas[i === participants.length - 1 ? 0 : i + 1].gift
+        });
+    }
+
+    return results;
+}
+
+function showResults() {
+    const santaResults = JSON.parse(localStorage.getItem('santaResults'));
+    const participantName = participants.find(p => p.name === santaResults[0].giver).name;  // Включим фильтрацию по имени участника
+
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = '<h3>Результаты Тайного Санты:</h3>';
+    
+    // Ищем только свою пару
+    const myResult = santaResults.find(result => result.giver === participantName);
+
+    if (myResult) {
+        const resultItem = document.createElement('div');
+        resultItem.classList.add('result-item');
+        resultItem.textContent = `${myResult.giver} подарит подарок ${myResult.receiver} — ${myResult.gift}`;
+        resultDiv.appendChild(resultItem);
+    }
+
+    // Убираем кнопку после генерации результатов
+    document.querySelector('button').disabled = true;
+    document.querySelector('button').textContent = "Результаты сгенерированы";
 }
