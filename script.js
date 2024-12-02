@@ -2,9 +2,6 @@ let participants = JSON.parse(localStorage.getItem('participants')) || [];
 
 document.addEventListener('DOMContentLoaded', () => {
     updateParticipantsList();
-    if (localStorage.getItem('santaResults')) {
-        showResults();
-    }
 });
 
 function addParticipant() {
@@ -13,7 +10,7 @@ function addParticipant() {
 
     if (name && gift) {
         participants.push({ name, gift });
-        localStorage.setItem('participants', JSON.stringify(participants));  // Сохраняем в localStorage
+        localStorage.setItem('participants', JSON.stringify(participants));  // Сохраняем список участников в localStorage
         updateParticipantsList();
         document.getElementById('name').value = '';
         document.getElementById('gift').value = '';
@@ -25,9 +22,9 @@ function addParticipant() {
 function updateParticipantsList() {
     const list = document.getElementById('participantsList');
     list.innerHTML = '';
-    participants.forEach((participant) => {
+    participants.forEach((participant, index) => {
         const listItem = document.createElement('li');
-        listItem.textContent = participant.name;  // Показываем только имена
+        listItem.textContent = `${index + 1}. ${participant.name}`;
         list.appendChild(listItem);
     });
 }
@@ -40,7 +37,7 @@ function generateSecretSanta() {
 
     const santaResults = assignSecretSantas(participants);
     localStorage.setItem('santaResults', JSON.stringify(santaResults));  // Сохраняем результаты в localStorage
-    showResults();
+    alert('Тайный Санта успешно сгенерирован! Вы можете скачать результаты.');
 }
 
 function assignSecretSantas(participants) {
@@ -65,24 +62,23 @@ function assignSecretSantas(participants) {
     return results;
 }
 
-function showResults() {
+function downloadResults() {
     const santaResults = JSON.parse(localStorage.getItem('santaResults'));
-    const participantName = participants.find(p => p.name === santaResults[0].giver).name;  // Включим фильтрацию по имени участника
-
-    const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = '<h3>Результаты Тайного Санты:</h3>';
-    
-    // Ищем только свою пару
-    const myResult = santaResults.find(result => result.giver === participantName);
-
-    if (myResult) {
-        const resultItem = document.createElement('div');
-        resultItem.classList.add('result-item');
-        resultItem.textContent = `${myResult.giver} подарит подарок ${myResult.receiver} — ${myResult.gift}`;
-        resultDiv.appendChild(resultItem);
+    if (!santaResults) {
+        alert('Сначала нужно сгенерировать Тайного Санту!');
+        return;
     }
 
-    // Убираем кнопку после генерации результатов
-    document.querySelector('button').disabled = true;
-    document.querySelector('button').textContent = "Результаты сгенерированы";
+    // Формируем текст для сохранения
+    let fileContent = 'Результаты Тайного Санты:\n\n';
+    santaResults.forEach(result => {
+        fileContent += `${result.giver} -> ${result.receiver} (Подарок: ${result.gift})\n`;
+    });
+
+    // Создаем текстовый файл и загружаем его
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'secret_santa_results.txt';
+    link.click();
 }
