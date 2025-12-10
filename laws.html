@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Федеральные Законы Империи ЕМАЕ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display+SC:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --paper-bg: #fdf5e6;
+            --ink-color: #2c241b;
+            --border-color: #463e36;
+            --menu-bg: #ebe5d7;
+            --highlight-color: #b80f0a;
+        }
+        /* ... (СКОПИРУЙТЕ ВСЕ СТИЛИ ИЗ <style> файла constitution.html СЮДА, чтобы избежать дублирования!) ... */
+        
+        body {
+            background-color: #2c2c2c;
+            margin: 0;
+            padding: 40px 0;
+            font-family: 'EB Garamond', serif;
+            color: var(--ink-color);
+            line-height: 1.6;
+        }
+
+        .parchment {
+            background-color: var(--paper-bg);
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 60px 80px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5), 0 0 5px rgba(0,0,0,0.2);
+            position: relative;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+        
+        .navigation-panel {
+            background-color: var(--menu-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px 20px;
+            margin-bottom: 40px;
+            text-align: center;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-link {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--ink-color);
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 5px 10px;
+            border: 2px solid transparent;
+            transition: all 0.2s ease-in-out;
+            display: inline-block;
+        }
+
+        .nav-link.active, .nav-link:hover {
+            color: var(--highlight-color);
+            border-bottom-color: var(--highlight-color);
+        }
+
+        .calligraphy-header {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 3px double var(--ink-color);
+            padding-bottom: 20px;
+        }
+        
+        .law-item {
+            margin-bottom: 30px;
+            border-left: 3px solid var(--highlight-color);
+            padding-left: 15px;
+        }
+
+        .law-date {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--highlight-color);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .law-body {
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        .law-annotation {
+            font-style: italic;
+            font-size: 0.95rem;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        /* ... (Остальные стили для адаптивности и прочего) ... */
+
+    </style>
+</head>
+<body>
+
+    <div class="parchment">
+        
+        <div class="navigation-panel">
+            <a href="constitution.html" class="nav-link">Конституция</a>
+            <a href="laws.html" class="nav-link active">Федеральные Законы</a>
+            <a href="precedents.html" class="nav-link">Политические Прецеденты</a>
+        </div>
+        
+        <h1 class="calligraphy-header">Федеральные Законы Империи</h1>
+
+        <p style="text-align: center; font-style: italic; margin-bottom: 50px;">
+            Дополнительные Нормативно-Правовые Акты, принятые Монархом или Кабинетом Министров, не входящие в основной текст Конституции.
+        </p>
+
+        <div class="law-item">
+            <span class="law-date">Указ №1 (11.01.2022)</span>
+            <p class="law-body">На сервере **строго запрещено обсуждать, упоминать, хуисосить любую часть серии игр Call Of Duty**.</p>
+            <p class="law-annotation">Источник: Сообщение в #законы от FartToMaster4.</p>
+        </div>
+
+        </div>
+
+</body>
+</html>
