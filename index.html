@@ -3,53 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тайный Санта</title>
+    <title>Конституция Империи ЕМАЕ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display+SC:wght@700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --paper-bg: #fdf5e6; /* Цвет старой бумаги */
+            --ink-color: #2c241b; /* Цвет старых чернил (темно-коричневый) */
+            --border-color: #463e36;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            background-color: #2c2c2c; /* Темный фон стола вокруг документа */
+            margin: 0;
+            padding: 40px 0;
+            font-family: 'EB Garamond', serif; /* Классический книжный шрифт */
+            color: var(--ink-color);
+            line-height: 1.6;
+        }
+
+        /* Лист бумаги */
+        .parchment {
+            background-color: var(--paper-bg);
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 60px 80px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5), 0 0 5px rgba(0,0,0,0.2);
+            position: relative;
+            /* Текстура бумаги через CSS-шум */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        /* Заголовок "We The People" стиль */
+        .calligraphy-header {
             text-align: center;
-            background-color: #f2f2f2;
-            padding: 20px;
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 3px double var(--ink-color);
+            padding-bottom: 20px;
         }
-        h1 {
-            color: #2c3e50;
+
+        .preamble-text {
+            font-size: 1.3rem;
+            text-align: justify;
+            margin-bottom: 40px;
+            font-weight: 600;
+            text-indent: 0;
         }
-        input, button {
-            margin: 10px;
-            padding: 10px;
-            font-size: 16px;
+
+        /* Первая фраза МЫ, ГРАЖДАНЕ - крупно как в оригинале США */
+        .we-the-people {
+            font-family: 'Playfair Display SC', serif;
+            font-size: 2.2em;
+            font-weight: 700;
+            float: left;
+            line-height: 0.8;
+            margin-right: 10px;
+            margin-bottom: -5px;
         }
-        .participant-list {
+
+        /* Статьи */
+        .article-title {
+            text-align: center;
+            font-family: 'Playfair Display SC', serif;
+            font-size: 1.5rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-decoration: underline;
+            text-underline-offset: 5px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-variant: small-caps;
+            font-size: 1.1rem;
             margin-top: 20px;
-            text-align: left;
-            display: inline-block;
-            max-width: 500px;
+            display: block;
         }
-        .result {
-            margin-top: 20px;
-            font-size: 18px;
+
+        p {
+            margin-bottom: 10px;
+            text-align: justify; /* Выравнивание по ширине как в газетах */
+            font-size: 1.1rem;
+        }
+
+        ul {
+            list-style-type: none; /* Убираем стандартные точки */
+            padding-left: 20px;
+        }
+        
+        ul li::before {
+            content: "— ";
+        }
+
+        /* Подпись */
+        .signature-block {
+            margin-top: 60px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .signature {
+            text-align: center;
+            width: 300px;
+        }
+
+        .signature-line {
+            border-bottom: 1px solid var(--ink-color);
+            margin-bottom: 10px;
+            height: 40px;
+            font-family: 'Cinzel', serif; /* Шрифт подписи */
+            font-size: 1.5rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .signature-label {
+            font-size: 0.9rem;
+            font-variant: small-caps;
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 768px) {
+            .parchment {
+                padding: 30px 20px;
+                width: 95%;
+            }
+            .calligraphy-header {
+                font-size: 2rem;
+            }
+            .we-the-people {
+                font-size: 1.5em;
+                float: none;
+                display: block;
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <h1>Тайный Санта</h1>
-    <p>Введите ваше имя и подарок, чтобы принять участие в игре.</p>
+    <div class="parchment">
+        <h1 class="calligraphy-header">Конституция Империи</h1>
 
-    <div>
-        <input type="text" id="name" placeholder="Ваше имя">
-        <input type="text" id="gift" placeholder="Ваш подарок">
-        <button onclick="addParticipant()">Добавить участника</button>
+        <div class="preamble-text">
+            <span class="we-the-people">Мы, Граждане</span> 
+            Discord-Империи ЕМАЕ, стремясь утвердить порядок, обеспечить справедливость, сохранить абсолютную власть монарха, укрепить единство сервера и гарантировать стабильность и согласие в обществе, принимаем и устанавливаем настоящую Конституцию Империи ЕМАЕ.
+        </div>
+
+        <div class="article">
+            <div class="article-title">Статья I. О Государственном Устрое</div>
+            
+            <span class="section-title">Секция 1. Природа государства</span>
+            <p>Империя ЕМАЕ является абсолютной, светской и монархической державой, где высшими ценностями признаются справедливость и монарх.</p>
+            
+            <span class="section-title">Секция 2. Основные принципы</span>
+            <p>Империю направляют принципы: абсолютизма; уважения интересов её субъектов; общественного согласия; политической стабильности, обеспечивающей развитие сервера.</p>
+        </div>
+
+        <div class="article">
+            <div class="article-title">Статья II. О Суверенитете и Территории</div>
+            
+            <span class="section-title">Секция 1. Унитарность</span>
+            <p>Империя ЕМАЕ является унитарным государством с единственным центром власти — монархом.</p>
+            
+            <span class="section-title">Секция 2. Суверенитет</span>
+            <p>Суверенитет Империи распространяется на весь Discord-сервер и всех его граждан. Государство обеспечивает целостность и неприкосновенность сервера.</p>
+            
+            <span class="section-title">Секция 3. Монарх</span>
+            <p>Первым и единственным монархом является: <strong>Tඞrtඞrඞn Dev#7385</strong>.</p>
+            
+            <span class="section-title">Секция 4. Наименование</span>
+            <p>Названия «Империя ЕМАЕ» и «ЕМАЕ» являются равнозначными.</p>
+        </div>
+
+        <div class="article">
+            <div class="article-title">Статья III. О Государственной Власти</div>
+            
+            <span class="section-title">Секция 1. Источник власти</span>
+            <p>Единственным источником власти в Империи является монарх и его кабинет министров.</p>
+            
+            <span class="section-title">Секция 2. Народовластие</span>
+            <p>Граждане осуществляют свою волю: прямо — через СБИЕ, или косвенно — через монарха и его приближённых.</p>
+
+            <span class="section-title">Секция 3. Узурпация власти</span>
+            <p>Никто, кроме монарха, не может присваивать власть. Лица, пытающиеся говорить от имени правительства или народа без полномочий, подлежат ответственности.</p>
+        </div>
+
+        <div class="article">
+            <div class="article-title">Статья IV. О Праве и Договорах</div>
+            
+            <span class="section-title">Секция 1. Право</span>
+            <p>Основой действующего права являются моральные нормы, присущие человеческому существу.</p>
+            
+            <span class="section-title">Секция 2. Равенство</span>
+            <p>Империя является интернациональной, и все граждане признаются равными в моральном аспекте.</p>
+
+            <span class="section-title">Секция 3. Международные договоры</span>
+            <p>Межсерверные и межадминские соглашения, одобренные монархом, имеют приоритет над внутренними законами.</p>
+        </div>
+
+        <div class="article">
+            <div class="article-title">Статья V. Об Объединениях</div>
+            
+            <span class="section-title">Секция 1. Многообразие идеологий</span>
+            <p>Империя признаёт идеологическое и политическое многообразие. Политические партии допускаются, но могут быть закрыты за нарушение прав монарха.</p>
+            
+            <span class="section-title">Секция 3. Запрещённые объединения</span>
+            <p>Запрещается создание организаций, стремящихся к: насильственному изменению строя; нарушению порядка; подрыву безопасности; разжиганию социальной, национальной, расовой или религиозной розни.</p>
+        </div>
+
+        <div style="margin-top: 50px; text-align: center; font-style: italic;">
+            <p>Принято в год 2023 от Рождества Христова.</p>
+        </div>
+
+        <div class="signature-block">
+            <div class="signature">
+                <div class="signature-line">Tඞrtඞrඞn Dev</div>
+                <div class="signature-label">Его Величество Император</div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="participant-list">
-        <h3>Участники:</h3>
-        <ul id="participantsList"></ul>
-    </div>
-
-    <button onclick="generateSecretSanta()">Сгенерировать Тайного Санту</button>
-    <button onclick="downloadResults()">Скачать результаты</button>
-
-    <script src="script.js"></script>
 </body>
 </html>
