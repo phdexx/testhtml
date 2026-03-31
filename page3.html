@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Принципы организации обмена данными</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="site-logo">Системы ввода-вывода</a>
+    <button class="nav-toggle" aria-label="Меню"><span></span><span></span><span></span></button>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="page1.html">Понятие и назначение</a></li>
+        <li><a href="page2.html">Состав и структура</a></li>
+        <li><a href="page3.html">Обмен данными</a></li>
+        <li><a href="page4.html">Интерфейсы</a></li>
+        <li><a href="conclusion.html">Выводы</a></li>
+        <li><a href="references.html">Литература</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="site-main">
+
+  <div class="breadcrumb"><a href="index.html">Главная</a> &rarr; Обмен данными</div>
+
+  <h1>Принципы организации обмена данными в системах ввода-вывода</h1>
+
+  <div class="card">
+    <h2>Введение</h2>
+    <p>Эффективная организация обмена данными напрямую влияет на общую производительность системы, поскольку скорость работы периферийных устройств, как правило, на несколько порядков ниже скорости работы процессора. Выделяют три основных метода:</p>
+    <ol class="content-list">
+      <li>Программируемый ввод-вывод (polling).</li>
+      <li>Ввод-вывод по прерываниям (Interrupt-Driven I/O).</li>
+      <li>Прямой доступ к памяти — ПДП (DMA).</li>
+    </ol>
+  </div>
+
+  <!-- Иллюстрация: три метода -->
+  <figure class="illustration">
+    <svg viewBox="0 0 780 250" xmlns="http://www.w3.org/2000/svg" style="background:#f9fbfd;border:1px solid #d4e6f1">
+      <!-- Метод 1: Polling -->
+      <rect x="15" y="10" width="240" height="230" rx="10" fill="#fef9e7" stroke="#f1c40f" stroke-width="1.5"/>
+      <text x="135" y="35" text-anchor="middle" fill="#7d6608" font-family="PT Sans,sans-serif" font-size="13" font-weight="700">Программируемый В/В</text>
+
+      <rect x="80" y="50" width="110" height="35" rx="6" fill="#1b4f72"/>
+      <text x="135" y="73" text-anchor="middle" fill="#fff" font-family="PT Sans,sans-serif" font-size="11" font-weight="700">ЦП</text>
+
+      <line x1="135" y1="85" x2="135" y2="105" stroke="#7d6608" stroke-width="2"/>
+      <text x="170" y="100" fill="#7d6608" font-family="PT Sans,sans-serif" font-size="9">опрос</text>
+      <polygon points="130,103 140,103 135,110" fill="#7d6608"/>
+
+      <rect x="80" y="112" width="110" height="35" rx="6" fill="#2e86c1"/>
+      <text x="135" y="135" text-anchor="middle" fill="#fff" font-family="PT Sans,sans-serif" font-size="11" font-weight="700">Контроллер</text>
+
+      <line x1="135" y1="147" x2="135" y2="167" stroke="#7d6608" stroke-width="2"/>
+      <polygon points="130,165 140,165 135,172" fill="#7d6608"/>
+
+      <rect x="80" y="174" width="110" height="35" rx="6" fill="#e67e22"/>
+      <text x="135" y="197" text-anchor="middle" fill="#fff" font-family="PT Sans,sans-serif" font-size="11" font-weight="700">Устройство</text>
+
+      <text x="135" y="225" text-anchor="middle" fill="#b03a2e" font-family="PT Sans,sans-serif" font-size="10">ЦП занят весь цикл</text>
+
+      <!-- Метод 2: Прерывания -->
+      <rect x="270" y="10" width="240" height="230" rx="10" fill="#d5f5e3" stroke="#27ae60" stroke-width="1.5"/>
+      <text x="390" y="35" text-anchor="middle" fill="#1a5226" font-family="PT Sans,sans-serif" font-size="13" font-weight="700">По прерываниям</text>
+
+      <rect x="335" y="50" width="110" height="35" rx="6" fill="#1b4f72"/>
+      <text x="390" y="73" text-anchor="middle" fill="#fff" font-family="PT Sans,sans-serif" font-size="11" font-weight="700">ЦП</text>
+
+      <line x1="390" y1="85" x2="390" y2="105" stroke="#1a5226" stroke-width="2"/>
+      <polygon points="385,103 395,103 390,110" fill="#1a5226"/>
+
+      <rect x="335" y="112" width="110" height="35" rx="6" fill="#27ae60"/>
+      <text x="390" y="135" text-anchor="middle" fill="#fff" font-family="PT Sans,sans-serif" font-size="11" font-weight="700">PIC</text>
+
+      <line x1="390" y1="147" x2="390" y2="167" stroke="#1a5226" stroke-width="2"/>
+      <text x="425" y="162" fill="#1a5226" font-family="PT Sans,sans-serif" font-size="9">IRQ ↑</text>
+      <polygon points="385,165 395,165 390,172" fill="#1a5226"/>
+
+      <rect x="335" y="174" width="110" height="35" rx="6" fill="#e67e22"/>
+      <text x="390" y="197" text-anchor="middle" fill="#fff" font-family="PT Sans,sans-serif" font-size="11" font-weight="700">Устройство</text>
+
+      <text x="390" y="225" text-anchor="middle" fill="#27ae60" font-family="PT Sans,sans-serif" font-size="10">ЦП свободен между IRQ</text>
+
+      <!-- Метод 3: DMA -->
+      <rect x="525" y="10" width="240" height="230" rx="10" fill="#d4e6f1" stroke="#1b4f72" stroke-width="1.5"/>
+      <text x="645" y="35" text-anchor="middle" fill="#1b4f72" font-family="PT Sans,sans-serif" font-size="13" font-weight="700">ПДП (DMA)</text>
+
+      <rect x="590" y="50" width="110" height="35" rx="6" fill="#1b4f72"/>
+      <text x="645" y="73" text-anchor="middle" fill="#fff" font-family="PT Sans,sans-serif" font-size="11" font-weight="700">ЦП</text>
+
+      <line x1="645" y1="85" x2="645" y2="105" stroke="#1b4f72" stroke-width="2" stroke-dasharray="5,3"/>
+      <text x="680" y="100" fill="#1b4f72" font-family="PT Sans,sans-serif" font-size="9">инит.</text>
+
+      <rect x="590" y="112" width="110" height="35" rx="6" fill="#8e44ad"/>
+      <text x="645" y="135" text-anchor="middle" fill="#fff" font-family="PT Sans,sans-serif" font-size="11" font-weight="700">DMA-контроллер</text>
+
+      <line x1="645" y1="147" x2="645" y2="167" stroke="#8e44ad" stroke-width="2.5"/>
+      <text x="685" y="162" fill="#8e44ad" font-family="PT Sans,sans-serif" font-size="9">блок</text>
+      <polygon points="640,165 650,165 645,172" fill="#8e44ad"/>
+
+      <rect x="590" y="174" width="110" height="35" rx="6" fill="#e67e22"/>
+      <text x="645" y="197" text-anchor="middle" fill="#fff" font-family="PT Sans,sans-serif" font-size="11" font-weight="700">ОЗУ / Устр.</text>
+
+      <text x="645" y="225" text-anchor="middle" fill="#1b4f72" font-family="PT Sans,sans-serif" font-size="10">ЦП свободен полностью</text>
+    </svg>
+    <figcaption>Рис. 1. Сравнение архитектурных схем трёх методов организации обмена данными</figcaption>
+  </figure>
+
+  <div class="card">
+    <h2>1. Программируемый ввод-вывод</h2>
+    <p>Наиболее простой метод: процессор непрерывно опрашивает регистр состояния контроллера устройства (polling). На протяжении всего обмена ЦП занят и не может выполнять другие задачи.</p>
+    <div class="info-box"><strong>Применение:</strong> простые встроенные системы и микроконтроллеры.</div>
+  </div>
+
+  <div class="card">
+    <h2>2. Ввод-вывод по прерываниям</h2>
+    <p>Процессор инициирует операцию и переключается на другие задачи. Устройство по готовности формирует сигнал прерывания (IRQ). Контроллер прерываний (PIC) обеспечивает приоритизацию и маршрутизацию запросов.</p>
+    <div class="info-box"><strong>Применение:</strong> клавиатуры, последовательные порты, сетевые карты.</div>
+  </div>
+
+  <div class="card">
+    <h2>3. Прямой доступ к памяти (DMA)</h2>
+    <p>Наиболее производительный метод. Контроллер ПДП самостоятельно передаёт блоки данных между устройством и ОЗУ в обход процессора.</p>
+    <h3>Алгоритм работы</h3>
+    <ol class="content-list">
+      <li>ЦП программирует контроллер ПДП (адрес буфера, размер, направление).</li>
+      <li>Контроллер захватывает системную шину (Bus Request → Bus Grant).</li>
+      <li>Данные передаются напрямую: устройство ↔ ОЗУ. ЦП свободен.</li>
+      <li>По завершении контроллер формирует прерывание.</li>
+    </ol>
+    <h3>Режимы работы ПДП</h3>
+    <ul class="content-list">
+      <li><strong>Single transfer</strong> — одно слово за запрос шины.</li>
+      <li><strong>Burst mode</strong> — весь блок за один захват.</li>
+      <li><strong>Cycle stealing</strong> — компромисс: по одному циклу шины.</li>
+    </ul>
+    <div class="info-box"><strong>Применение:</strong> SATA, NVMe, USB 3.x, PCIe, GPU. NVMe поддерживает до 65 535 очередей команд.</div>
+  </div>
+
+  <div class="card">
+    <h2>Буферизация и кэширование</h2>
+    <ul class="content-list">
+      <li><strong>Буферизация</strong> — временное хранение данных, сглаживающее разницу скоростей.</li>
+      <li><strong>Страничный кэш ОС</strong> — хранит востребованные блоки в ОЗУ.</li>
+      <li><strong>Аппаратное кэширование</strong> — DRAM-буфер контроллера + SLC-кэш флеш-памяти.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Сравнительная таблица</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Критерий</th><th>Программируемый</th><th>Прерывания</th><th>ПДП (DMA)</th></tr></thead>
+        <tbody>
+          <tr><td>Участие ЦП</td><td>Постоянное</td><td>Минимальное</td><td>Только инициализация</td></tr>
+          <tr><td>Скорость</td><td>Низкая</td><td>Средняя</td><td>Высокая</td></tr>
+          <tr><td>Единица передачи</td><td>Байт/слово</td><td>Байт/слово</td><td>Блок данных</td></tr>
+          <tr><td>Сложность</td><td>Низкая</td><td>Средняя</td><td>Высокая</td></tr>
+          <tr><td>Применение</td><td>Микроконтроллеры</td><td>Клавиатура, UART</td><td>NVMe, SATA, USB 3.x, GPU</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <strong>Итог.</strong> Современные системы применяют все три метода совместно: polling — для простых устройств, прерывания — для асинхронных событий, ПДП — для высокоскоростной блочной передачи.
+  </div>
+
+  <div class="page-nav">
+    <a href="page2.html">&larr; Состав и структура</a>
+    <a href="page4.html">Интерфейсы &rarr;</a>
+  </div>
+
+</main>
+
+<footer class="site-footer"><p>Образовательный ресурс «Структура систем ввода-вывода» &copy; 2026</p></footer>
+<button class="back-to-top" aria-label="Наверх">&#8593;</button>
+<script src="js/script.js"></script>
+</body>
+</html>
