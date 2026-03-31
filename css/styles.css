@@ -69,6 +69,13 @@ a:hover{color:var(--accent);text-decoration:underline}
 /* ===== Main ===== */
 .site-main{flex:1;max-width:var(--max-w);width:100%;margin:0 auto;padding:2rem 1.5rem 3rem}
 
+/* ===== Hero block (index) ===== */
+.hero-block{text-align:center;padding:2.5rem 1.5rem 2rem;margin-bottom:1.5rem;background:linear-gradient(135deg,#1b4f72 0%,#2e86c1 100%);border-radius:var(--radius);color:#fff;box-shadow:0 4px 20px rgba(27,79,114,.2)}
+.hero-block h1{color:#fff;font-size:2.1rem;margin-bottom:.5rem}
+.hero-icon{display:block;margin:0 auto .8rem;opacity:.85}
+.hero-subtitle{font-family:'PT Sans',sans-serif;font-size:1.05rem;opacity:.85;margin-bottom:1rem}
+.hero-lead{font-size:.97rem;line-height:1.7;max-width:680px;margin:0 auto;text-align:center;opacity:.92}
+
 /* ===== Card & Boxes ===== */
 .card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.4rem 1.6rem;margin-bottom:1.4rem;transition:box-shadow var(--tr)}
 .card:hover{box-shadow:var(--shadow-hover)}
@@ -124,6 +131,14 @@ ul.content-list li,ol.content-list li{margin-bottom:.35rem}
 .back-to-top{position:fixed;bottom:1.5rem;right:1.5rem;width:40px;height:40px;background:var(--primary);color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity var(--tr),visibility var(--tr);box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .back-to-top.visible{opacity:1;visibility:visible}
 .back-to-top:hover{background:var(--primary-light)}
+
+/* ===== Conclusion banner ===== */
+.conclusion-banner{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:1.5rem 0}
+.conclusion-stat{background:linear-gradient(135deg,#1b4f72,#2e86c1);color:#fff;border-radius:var(--radius);padding:1.3rem 1rem;text-align:center;box-shadow:0 4px 12px rgba(27,79,114,.18)}
+.conclusion-stat__number{display:block;font-family:'PT Sans',sans-serif;font-size:2rem;font-weight:700;line-height:1.1}
+.conclusion-stat__label{display:block;font-family:'PT Sans',sans-serif;font-size:.88rem;margin-top:.2rem;opacity:.9}
+.conclusion-stat__detail{display:block;font-size:.72rem;margin-top:.35rem;opacity:.6;font-family:'PT Sans',sans-serif}
+@media(max-width:600px){.conclusion-banner{grid-template-columns:1fr 1fr}}
 
 /* ===== Illustrations ===== */
 .illustration{margin:1.5rem 0;text-align:center}
