@@ -17,7 +17,7 @@
       <span>МАТЕРИНСКАЯ ПЛАТА</span>
     </div>
     <div class="header-stats">
-      <div class="hstat">Элементов: <span id="hs-total">40</span></div>
+      <div class="hstat">Элементов: <span id="hs-total">41</span></div>
       <div class="hstat">Показано: <span id="hs-visible">40</span></div>
       <div class="hstat">Верно: <span id="hs-right" style="color:var(--green)">0</span></div>
     </div>
@@ -107,6 +107,7 @@ const photos = {
   38: "img/38.jpg",
   39: "img/39.jpg",
   40: "img/40.jpg",
+  41: "img/41.jpg",
 };
 
 const iface = {
@@ -132,6 +133,7 @@ const iface = {
   26:"serial:Последовательный — Ethernet 1000BASE-T: 4 витые пары, последовательно",
   32:"mixed:Смешанный — сам по LPC (последовательная); управляет LPT (параллельный) и COM (последовательный)",
   40:"serial:Последовательный — TPM подключается по LPC или SPI (оба последовательные)",
+  41:"serial:Последовательный — чип подключён к чипсету по PCIe x1 (дифференциальные пары)",
 };
 
 const ifaceStyle = {
@@ -302,6 +304,10 @@ const elements = [
    func:"Подключение модуля доверенной загрузки — шифрование, Secure Boot.",
    chars:"14-pin (Intel) или 20-pin. TPM 2.0 — обязателен для Windows 11. LPC или SPI",
    tip:"Надпись TPM на плате. Windows 11 требует TPM 2.0 — если нет модуля, возможно он уже встроен в CPU."},
+  {n:41,name:"Ethernet контроллер Realtek",eng:"Realtek NIC / RTL8111",cat:"Сеть",color:"#3b82f6",
+   func:"Микросхема сетевого контроллера на плате. Обеспечивает проводное подключение к сети.",
+   chars:"RTL8111/RTL8168: 1 Гбит/с. RTL8125: 2.5 Гбит/с. Интерфейс PCIe x1. Поддержка Wake-on-LAN",
+   tip:"Маленький чип рядом с RJ-45 разъёмом. Если сеть не работает — скорее всего нет драйвера Realtek."},
 ];
 
 const allCats = ["Все", ...new Set(elements.map(e=>e.cat))];
