@@ -315,6 +315,15 @@ let activeCat = "Все";
 let openCard = null;
 let mode = "learn";
 let qRight = 0, qWrong = 0;
+let quizQueue = [], lastQuizN = null;
+
+function refillQueue(){
+  quizQueue = [...elements].sort(() => Math.random() - 0.5);
+  if(quizQueue.length > 1 && quizQueue[0].n === lastQuizN){
+    const i = 1 + Math.floor(Math.random() * (quizQueue.length - 1));
+    [quizQueue[0], quizQueue[i]] = [quizQueue[i], quizQueue[0]];
+  }
+}
 
 function setMode(m){
   mode = m;
@@ -403,7 +412,9 @@ function toggleCard(n){
 
 // QUIZ
 function nextQ(){
-  const e = elements[Math.floor(Math.random()*elements.length)];
+  if(quizQueue.length === 0) refillQueue();
+  const e = quizQueue.shift();
+  lastQuizN = e.n;
   const types = ['func','chars','photo','photo'];
   const type = types[Math.floor(Math.random()*types.length)];
 
