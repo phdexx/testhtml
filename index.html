@@ -503,6 +503,7 @@ function startGame(){
   for(let i=1;i<=elements.length;i++){
     const img=new Image(); img.src=photos[i]||`img/${i}.jpg`; gameImgs.push(img);
   }
+  const shevchukImg=new Image(); shevchukImg.src='game_assets/img/shevchuk.jpg';
 
   const stars=Array.from({length:80},()=>({
     x:Math.random()*W, y:Math.random()*H,
@@ -548,57 +549,26 @@ function startGame(){
   }
 
   function drawShevchuk(b){
-    ctx.save(); ctx.translate(b.x,b.y);
+    const iw=90,ih=110;
     if(b.hitFlash>0) ctx.globalAlpha=0.3+0.7*((10-b.hitFlash)/10);
-    // Guitar (behind body)
-    ctx.fillStyle='#7a3510'; ctx.fillRect(20,-52,7,54);
-    ctx.beginPath(); ctx.arc(30,12,16,0,Math.PI*2); ctx.fillStyle='#c46e1a'; ctx.fill();
-    ctx.beginPath(); ctx.arc(24,-2,11,0,Math.PI*2); ctx.fillStyle='#d4841e'; ctx.fill();
-    ctx.beginPath(); ctx.arc(28,8,4,0,Math.PI*2); ctx.fillStyle='#3a1a00'; ctx.fill();
-    ctx.strokeStyle='rgba(220,210,170,0.8)'; ctx.lineWidth=0.8;
-    for(let i=0;i<5;i++){
-      const sx=21+i*1.5;
-      ctx.beginPath(); ctx.moveTo(sx,-48);
-      ctx.quadraticCurveTo(sx+Math.sin(b.ang+i)*2.5,0,sx,18); ctx.stroke();
-    }
-    // Jacket body
-    ctx.fillStyle='#14111c';
-    ctx.beginPath(); ctx.moveTo(-22,-10); ctx.lineTo(-26,46); ctx.lineTo(16,46); ctx.lineTo(18,-10); ctx.closePath(); ctx.fill();
-    ctx.fillStyle='#1e1a2c';
-    ctx.beginPath(); ctx.moveTo(-22,-10); ctx.lineTo(-10,18); ctx.lineTo(0,-10); ctx.closePath(); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(18,-10); ctx.lineTo(8,18); ctx.lineTo(0,-10); ctx.closePath(); ctx.fill();
-    ctx.fillStyle='#555'; ctx.fillRect(-4,-10,8,22);
-    // Legs
-    ctx.fillStyle='#1e1a2c'; ctx.fillRect(-17,46,12,22); ctx.fillRect(5,46,12,22);
-    ctx.fillStyle='#090910'; ctx.fillRect(-19,60,14,8); ctx.fillRect(3,60,14,8);
-    // Left arm
-    ctx.fillStyle='#14111c'; ctx.fillRect(-32,-7,11,28);
-    ctx.beginPath(); ctx.arc(-26,23,6,0,Math.PI*2); ctx.fillStyle='#b07040'; ctx.fill();
-    // Hair (grey)
-    ctx.beginPath(); ctx.arc(0,-36,23,0,Math.PI*2); ctx.fillStyle='#b8b8c4'; ctx.fill();
-    [[-14,-58],[-7,-63],[0,-61],[7,-63],[14,-58]].forEach(([hx,hy])=>{
-      ctx.beginPath(); ctx.moveTo(hx-5,-46); ctx.lineTo(hx,hy); ctx.lineTo(hx+5,-46);
-      ctx.closePath(); ctx.fillStyle='#cacad6'; ctx.fill();
-    });
-    // Face
-    ctx.beginPath(); ctx.arc(0,-32,20,0,Math.PI*2); ctx.fillStyle='#c07848'; ctx.fill();
-    // Beard
-    ctx.beginPath(); ctx.arc(0,-24,18,0.1,Math.PI-0.1); ctx.fillStyle='#4a3424'; ctx.fill();
-    ctx.fillStyle='#5a4434'; ctx.fillRect(-14,-28,8,10); ctx.fillRect(6,-28,8,10);
-    // Mouth
-    ctx.beginPath(); ctx.arc(0,-25,7,0.2,Math.PI-0.2); ctx.strokeStyle='#2a180a'; ctx.lineWidth=1.5; ctx.stroke();
-    // Nose
-    ctx.beginPath(); ctx.arc(0,-34,2.5,0,Math.PI); ctx.fillStyle='#a86840'; ctx.fill();
-    // Eyes
-    ctx.fillStyle='#fff'; ctx.fillRect(-12,-42,8,6); ctx.fillRect(4,-42,8,6);
-    ctx.fillStyle='#100800'; ctx.fillRect(-10,-42,5,6); ctx.fillRect(6,-42,5,6);
-    // Eyebrows
-    ctx.strokeStyle='#2a180a'; ctx.lineWidth=2.2; ctx.lineCap='round';
-    ctx.beginPath(); ctx.moveTo(-13,-45); ctx.lineTo(-4,-43); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(13,-45); ctx.lineTo(4,-43); ctx.stroke();
-    ctx.globalAlpha=1; ctx.restore();
-    // HP bar (screen space)
-    const bw=140,bh=9,bx=b.x-70,by=b.y-86;
+    // Photo clipped to rounded rect
+    ctx.save();
+    ctx.translate(b.x,b.y);
+    rrect(ctx,-iw/2,-ih/2,iw,ih,14); ctx.clip();
+    if(shevchukImg.complete&&shevchukImg.naturalWidth>0)
+      ctx.drawImage(shevchukImg,-iw/2,-ih/2,iw,ih);
+    else{ ctx.fillStyle='#22222f'; ctx.fill(); }
+    ctx.restore();
+    // Glowing border
+    ctx.save();
+    ctx.translate(b.x,b.y);
+    rrect(ctx,-iw/2,-ih/2,iw,ih,14);
+    ctx.shadowColor='#f87171'; ctx.shadowBlur=18;
+    ctx.strokeStyle='#f87171'; ctx.lineWidth=3; ctx.stroke();
+    ctx.restore();
+    ctx.globalAlpha=1; ctx.shadowBlur=0;
+    // HP bar
+    const bw=140,bh=9,bx=b.x-70,by=b.y-ih/2-22;
     ctx.fillStyle='rgba(10,10,15,0.75)'; rrect(ctx,bx-2,by-2,bw+4,bh+4,5); ctx.fill();
     const pct=b.hp/b.maxHp;
     ctx.fillStyle=pct>0.5?'#34d399':pct>0.25?'#fbbf24':'#f87171';
