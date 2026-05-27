@@ -27,6 +27,7 @@
 <div class="mode-bar">
   <button class="mode-btn active" id="btn-learn" onclick="setMode('learn')">📚 Изучение</button>
   <button class="mode-btn" id="btn-quiz" onclick="setMode('quiz')">🎯 Тренировка</button>
+  <button class="mode-btn" id="btn-round" onclick="setMode('round')">📋 Раунд</button>
 </div>
 
 <div class="controls" id="learn-controls">
@@ -43,6 +44,33 @@
     <div class="empty" id="empty" style="display:none">
       <div class="empty-icon">🔎</div>
       <div class="empty-text">Ничего не найдено</div>
+    </div>
+  </div>
+</div>
+
+<div id="round-view" style="display:none">
+  <div class="quiz-wrap">
+    <div class="quiz-card" id="round-main">
+      <div class="round-prog-wrap">
+        <div class="round-prog-bar"><div class="round-prog-fill" id="round-fill"></div></div>
+        <div class="round-counter" id="round-counter">Вопрос 1 из 20</div>
+      </div>
+      <div class="quiz-q" id="round-q"></div>
+      <div id="round-photo" style="display:none"><img id="round-photo-img" alt="Угадай элемент"></div>
+      <div class="quiz-opts" id="round-opts"></div>
+      <div class="quiz-result" id="round-result" style="display:none"></div>
+      <button class="next-btn" id="round-next-btn" onclick="roundNext()" style="display:none">Следующий →</button>
+    </div>
+    <div class="results-card" id="round-results" style="display:none">
+      <div class="res-title" id="results-title">Раунд завершён</div>
+      <div class="res-score" id="results-score"></div>
+      <div id="results-errors"></div>
+      <div id="results-changes"></div>
+      <div class="res-actions">
+        <button class="next-btn" onclick="startRound()">Следующий раунд →</button>
+        <button id="final-test-btn" class="next-btn final-btn" onclick="startFinalTest()" style="display:none">🏆 Финальный тест</button>
+        <button class="mode-btn" onclick="setMode('learn')" style="margin-top:8px;width:100%">← К карточкам</button>
+      </div>
     </div>
   </div>
 </div>
@@ -316,6 +344,18 @@ let openCard = null;
 let mode = "learn";
 let qRight = 0, qWrong = 0;
 let quizQueue = [], lastQuizN = null;
+const LEVEL_ICONS = ['⬜','🟡','🟠','🟢'];
+const LEVEL_NAMES = ['Не изучен','Знакомый','Знает','Усвоен'];
+let progress = {};
+function loadProgress(){ try{ progress=JSON.parse(localStorage.getItem('mb_progress')||'{}'); }catch(e){} }
+function saveProgress(){ localStorage.setItem('mb_progress',JSON.stringify(progress)); }
+function getP(n){ if(!progress[n]) progress[n]={level:0,streak:0}; return progress[n]; }
+function updateProgress(n,correct){
+  const p=getP(n);
+  if(correct){ p.streak++; p.level=p.streak>=4?3:p.streak>=2?2:Math.max(p.level,1); }
+  else{ p.streak=0; p.level=Math.max(0,p.level-1); }
+  saveProgress();
+}
 
 function refillQueue(){
   quizQueue = [...elements].sort(() => Math.random() - 0.5);
@@ -329,10 +369,13 @@ function setMode(m){
   mode = m;
   document.getElementById("btn-learn").classList.toggle("active", m==="learn");
   document.getElementById("btn-quiz").classList.toggle("active", m==="quiz");
+  document.getElementById("btn-round").classList.toggle("active", m==="round");
   document.getElementById("learn-controls").style.display = m==="learn"?"":"none";
   document.getElementById("learn-view").style.display = m==="learn"?"":"none";
   document.getElementById("quiz-view").style.display = m==="quiz"?"":"none";
+  document.getElementById("round-view").style.display = m==="round"?"":"none";
   if(m==="quiz") nextQ();
+  if(m==="round") startRound();
 }
 
 function buildCats(){
@@ -384,6 +427,7 @@ function buildCard(e){
         <div class="card-eng">${e.eng}</div>
       </div>
       <span class="cat-pill" style="background:${e.color}18;color:${e.color}">${e.cat}</span>
+      <span class="prog-badge" title="${LEVEL_NAMES[getP(e.n).level]}">${LEVEL_ICONS[getP(e.n).level]}</span>
       <span class="chevron">▾</span>
     </div>
     <div class="card-body">
@@ -460,8 +504,103 @@ function answerQ(chosen, correct){
   res.textContent = right ? "✓ Верно!" : `✗ Неверно. Правильный ответ: ${correct}`;
 }
 
+// ROUND MODE
+let roundQuestions=[],roundIdx=0,roundAnswers=[],roundCurrent=null,isFinalTest=false;
+
+function weightedSample(arr,weights,n){
+  const pool=arr.map((e,i)=>({e,w:weights[i]}));
+  const out=[]; n=Math.min(n,pool.length);
+  for(let i=0;i<n;i++){
+    const tot=pool.reduce((s,x)=>s+x.w,0);
+    let r=Math.random()*tot;
+    for(let j=0;j<pool.length;j++){ r-=pool[j].w; if(r<=0){out.push(pool[j].e);pool.splice(j,1);break;} }
+  }
+  return out;
+}
+
+function startRound(){
+  isFinalTest=false;
+  const weights=elements.map(e=>[2,1.5,1,0.3][getP(e.n).level]??1);
+  roundQuestions=weightedSample(elements,weights,20);
+  roundIdx=0; roundAnswers=[];
+  document.getElementById('round-results').style.display='none';
+  document.getElementById('round-main').style.display='';
+  showRoundQ();
+}
+
+function startFinalTest(){
+  isFinalTest=true;
+  roundQuestions=[...elements].sort(()=>Math.random()-0.5);
+  roundIdx=0; roundAnswers=[];
+  document.getElementById('round-results').style.display='none';
+  document.getElementById('round-main').style.display='';
+  showRoundQ();
+}
+
+function showRoundQ(){
+  const e=roundCurrent=roundQuestions[roundIdx];
+  const total=roundQuestions.length;
+  document.getElementById('round-counter').textContent=(isFinalTest?'Финальный тест: ':'')+`Вопрос ${roundIdx+1} из ${total}`;
+  document.getElementById('round-fill').style.width=`${roundIdx/total*100}%`;
+  const types=['func','chars','photo','photo'];
+  const type=types[Math.floor(Math.random()*types.length)];
+  const pEl=document.getElementById('round-photo'), pImg=document.getElementById('round-photo-img');
+  if(type==='photo'){ pImg.src=photos[e.n]||''; pEl.style.display=''; document.getElementById('round-q').textContent='Что изображено на фото?'; }
+  else{ pEl.style.display='none'; document.getElementById('round-q').textContent=type==='func'?`Какой элемент выполняет функцию?\n\n«${e.func}»`:`Какой элемент имеет характеристику?\n\n«${e.chars.substring(0,90)}…»`; }
+  document.getElementById('round-result').style.display='none';
+  document.getElementById('round-next-btn').style.display='none';
+  const others=elements.filter(x=>x.n!==e.n).sort(()=>Math.random()-0.5).slice(0,3).map(x=>x.name);
+  document.getElementById('round-opts').innerHTML=[e.name,...others].sort(()=>Math.random()-0.5).map(o=>
+    `<button class="qopt" onclick="roundAnswer('${o.replace(/'/g,"\\'")}','${e.name.replace(/'/g,"\\'")}')">${o}</button>`
+  ).join('');
+}
+
+function roundAnswer(chosen,correct){
+  const e=roundCurrent, right=chosen===correct;
+  const prev=getP(e.n).level;
+  updateProgress(e.n,right);
+  roundAnswers.push({n:e.n,name:e.name,correct:right,prev,next:getP(e.n).level});
+  document.querySelectorAll('#round-opts .qopt').forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===correct) b.classList.add('correct');
+    else if(b.textContent===chosen&&!right) b.classList.add('wrong');
+  });
+  const res=document.getElementById('round-result');
+  res.style.display=''; res.className='quiz-result '+(right?'ok':'fail');
+  res.textContent=right?'✓ Верно!':`✗ Неверно. Правильный ответ: ${correct}`;
+  const nb=document.getElementById('round-next-btn');
+  nb.style.display='';
+  nb.textContent=roundIdx+1<roundQuestions.length?'Следующий →':'Завершить →';
+  filterCards();
+}
+
+function roundNext(){
+  roundIdx++;
+  if(roundIdx>=roundQuestions.length) showRoundResults();
+  else showRoundQ();
+}
+
+function showRoundResults(){
+  document.getElementById('round-main').style.display='none';
+  document.getElementById('round-results').style.display='';
+  const ok=roundAnswers.filter(a=>a.correct).length;
+  const wrong=roundAnswers.filter(a=>!a.correct);
+  document.getElementById('results-score').innerHTML=`<span style="color:var(--green)">${ok}</span> / ${roundAnswers.length}`;
+  document.getElementById('results-errors').innerHTML=wrong.length===0
+    ?'<div class="res-perfect">🎉 Без ошибок!</div>'
+    :'<div class="res-section">Ошибки</div>'+wrong.map(a=>`<div class="res-row res-err">${LEVEL_ICONS[a.next]} ${a.name}</div>`).join('');
+  const changed=roundAnswers.filter(a=>a.prev!==a.next);
+  document.getElementById('results-changes').innerHTML=changed.length===0?''
+    :'<div class="res-section">Прогресс</div>'+changed.map(a=>`<div class="res-row">${a.name}: ${LEVEL_ICONS[a.prev]} → ${LEVEL_ICONS[a.next]}</div>`).join('');
+  document.getElementById('results-title').textContent=isFinalTest
+    ?(ok===roundAnswers.length?'🏆 Идеальный результат!':'Финальный тест завершён')
+    :'Раунд завершён';
+  document.getElementById('final-test-btn').style.display=elements.every(e=>getP(e.n).level>=2)?'':'none';
+}
+
 // INIT
 document.getElementById("hs-total").textContent = elements.length;
+loadProgress();
 buildCats();
 filterCards();
 
