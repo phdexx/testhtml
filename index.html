@@ -68,8 +68,12 @@
       <div id="results-changes"></div>
       <div class="res-actions">
         <button class="next-btn" onclick="startRound()">Следующий раунд →</button>
-        <button id="final-test-btn" class="next-btn final-btn" onclick="startFinalTest()" style="display:none">🏆 Финальный тест</button>
+        <div class="final-test-wrap">
+          <button id="final-test-btn" class="next-btn final-btn final-locked" disabled>🔒 Финальный тест</button>
+          <div class="final-hint" id="final-hint">Открывается когда все элементы достигнут 🟠</div>
+        </div>
         <button class="mode-btn" onclick="setMode('learn')" style="margin-top:8px;width:100%">← К карточкам</button>
+        <button class="reset-btn" onclick="resetProgress()">↺ Сбросить прогресс</button>
       </div>
     </div>
   </div>
@@ -597,7 +601,27 @@ function showRoundResults(){
   document.getElementById('results-title').textContent=isFinalTest
     ?(ok===roundAnswers.length?'🏆 Идеальный результат!':'Финальный тест завершён')
     :'Раунд завершён';
-  document.getElementById('final-test-btn').style.display=elements.every(e=>getP(e.n).level>=2)?'':'none';
+  const canFinal=elements.every(e=>getP(e.n).level>=2);
+  const ftBtn=document.getElementById('final-test-btn');
+  const ftHint=document.getElementById('final-hint');
+  if(canFinal){
+    ftBtn.disabled=false; ftBtn.textContent='🏆 Финальный тест';
+    ftBtn.classList.remove('final-locked'); ftBtn.onclick=startFinalTest;
+    ftHint.style.display='none';
+  } else {
+    ftBtn.disabled=true; ftBtn.textContent='🔒 Финальный тест';
+    ftBtn.classList.add('final-locked'); ftBtn.onclick=null;
+    const ready=elements.filter(e=>getP(e.n).level>=2).length;
+    ftHint.textContent=`Открывается при уровне 🟠 у всех элементов (${ready}/${elements.length})`;
+    ftHint.style.display='';
+  }
+}
+
+function resetProgress(){
+  if(!confirm('Сбросить весь прогресс? Это нельзя отменить.')) return;
+  progress={}; lastRoundNs=new Set(); saveProgress();
+  filterCards();
+  startRound();
 }
 
 // INIT

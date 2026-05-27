@@ -222,8 +222,18 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-h
 .res-err{color:var(--red)}
 .res-perfect{font-size:14px;color:var(--green);text-align:center;padding:6px}
 .res-actions{display:flex;flex-direction:column;gap:8px}
+.final-test-wrap{display:flex;flex-direction:column;gap:6px}
 .final-btn{background:rgba(251,191,36,.12)!important;border-color:#fbbf24!important;color:#fbbf24!important}
-.final-btn:hover{background:#fbbf24!important;color:#000!important}
+.final-btn:hover:not(:disabled){background:#fbbf24!important;color:#000!important}
+.final-locked{background:rgba(42,42,58,.5)!important;border-color:var(--border2)!important;color:var(--text3)!important;cursor:not-allowed!important}
+.final-hint{font-size:11px;color:var(--text3);text-align:center;font-family:'JetBrains Mono',monospace}
+.reset-btn{
+  margin-top:4px;padding:9px;font-size:12px;font-weight:500;
+  border:1px solid rgba(248,113,113,.25);border-radius:10px;
+  background:transparent;color:var(--red);cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all .2s;width:100%;
+}
+.reset-btn:hover{background:var(--red-dim);border-color:var(--red)}
 /* Progress badge on cards */
 .prog-badge{font-size:13px;flex-shrink:0;margin-left:2px;cursor:default}
 
