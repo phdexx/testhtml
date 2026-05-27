@@ -506,9 +506,10 @@ function answerQ(chosen, correct){
 
 // ROUND MODE
 let roundQuestions=[],roundIdx=0,roundAnswers=[],roundCurrent=null,isFinalTest=false;
+let lastRoundNs=new Set();
 
 function weightedSample(arr,weights,n){
-  const pool=arr.map((e,i)=>({e,w:weights[i]}));
+  const pool=arr.map((e,i)=>({e,w:weights[i]})).filter(x=>x.w>0);
   const out=[]; n=Math.min(n,pool.length);
   for(let i=0;i<n;i++){
     const tot=pool.reduce((s,x)=>s+x.w,0);
@@ -520,8 +521,9 @@ function weightedSample(arr,weights,n){
 
 function startRound(){
   isFinalTest=false;
-  const weights=elements.map(e=>[2,1.5,1,0.3][getP(e.n).level]??1);
+  const weights=elements.map(e=>lastRoundNs.has(e.n)?0:([2,1.5,1,0.3][getP(e.n).level]??1));
   roundQuestions=weightedSample(elements,weights,20);
+  lastRoundNs=new Set(roundQuestions.map(e=>e.n));
   roundIdx=0; roundAnswers=[];
   document.getElementById('round-results').style.display='none';
   document.getElementById('round-main').style.display='';
